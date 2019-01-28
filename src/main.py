@@ -32,6 +32,7 @@ from lib import select_k_best_genes
 @click.option('--num-training-genes', 'n_train', default=50, type=int, show_default=True,
               help='If gene-list is empty, will use SelectKBest to choose gene set.')
 def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_train):
+    click.clear()
     # Load input data
     print('Loading input data')
     sample = get_sample(sample, name)
