@@ -39,13 +39,17 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     df = df.sort_values(group)
 
     # Parse training genes
-    genes = df[int(col_skip):]
+    genes = df.columns[int(col_skip):]
     if gene_list is None:
         print('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)')
         training_genes = select_k_best_genes(df, genes, group=group, n=n_train)
     else:
         with open(gene_list, 'r') as f:
             training_genes = [x.strip() for x in f.readlines()]
+
+    # Output
+    out_dir = os.path.join(out_dir, name)
+    os.makedirs(out_dir, exist_ok=True)
 
     # Select training set
     print('Selecting training set')
@@ -57,10 +61,6 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
 
     # Run Model
     model, trace = run_model(sample, train_set, training_genes, group=group)
-
-    # Output
-    out_dir = os.path.join(out_dir, name)
-    os.makedirs(out_dir, exist_ok=True)
 
     # Traceplot
     fig, axarr = plt.subplots(3, 2, figsize=(10, 5))
