@@ -28,7 +28,7 @@ from lib import select_k_best_genes
 @click.option('--col-skip', default=1, show_default=True, type=int,
               help='Number of metadata columns to skip in background matrix so remainder are genes')
 @click.option('--num-backgrounds', 'n_bg', default=5, type=int, show_default=True,
-              'Number of background categorical groups to include in the model training')
+              help='Number of background categorical groups to include in the model training')
 @click.option('--num-training-genes', 'n_train', default=50, type=int, show_default=True,
               help='If gene-list is empty, will use SelectKBest to choose gene set.')
 def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_train):
