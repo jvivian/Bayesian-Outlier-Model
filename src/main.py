@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import click
 import matplotlib.pyplot as plt
@@ -13,6 +14,8 @@ from lib import posterior_predictive_check
 from lib import posterior_predictive_pvals
 from lib import run_model
 from lib import select_k_best_genes
+
+warnings.filterwarnings('ignore')
 
 
 @click.command()
