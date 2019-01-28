@@ -36,8 +36,10 @@ warnings.filterwarnings('ignore')
               help='If gene-list is empty, will use SelectKBest to choose gene set.')
 def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_train):
     click.clear()
+    click.secho('Bayesian Gene Expression Outlier Model', fg='green', bg='black', bold=True)
+
     # Load input data
-    print('Loading input data')
+    click.echo('Loading input data')
     sample = get_sample(sample, name)
     df = load_df(background)
     df = df.sort_values(group)
@@ -45,7 +47,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     # Parse training genes
     genes = df.columns[col_skip:]
     if gene_list is None:
-        print('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)')
+        click.secho('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)', fg='yellow')
         training_genes = select_k_best_genes(df, genes, group=group, n=n_train)
     else:
         with open(gene_list, 'r') as f:
@@ -56,7 +58,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     os.makedirs(out_dir, exist_ok=True)
 
     # Select training set
-    print('Selecting training set')
+    click.echo('Selecting training set')
     ranks = pairwise_distance_ranks(sample, df, genes, group)
     ranks_out = os.path.join(out_dir, 'ranks.tsv')
     ranks.to_csv(ranks_out, sep='\t')

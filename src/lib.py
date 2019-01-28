@@ -1,6 +1,7 @@
 import pickle
 from typing import List, Dict
 
+import click
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -132,7 +133,7 @@ def run_model(sample: pd.Series,
             cat_sd = 0.1 if cat_sd == 0 else cat_sd
             ys[f'{gene}-{dataset}'] = (cat_mu, cat_sd)
 
-    print('Building model')
+    click.echo('Building model')
     with pm.Model() as model:
         # Linear model priors
         a = pm.Normal('a', mu=0, sd=1)
