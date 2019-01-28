@@ -30,13 +30,13 @@ def select_k_best_genes(df: pd.DataFrame, genes: List[str], group='tissue', n=50
     return [genes[i] for i in k.get_support(indices=True)]
 
 
-def get_sample(df_path: str, sample: str) -> pd.Series:
+def get_sample(df_path: str, sample_name: str) -> pd.Series:
     """
     Loads dataframe containing sample and returns sample
 
     Args:
         df_path: Path to DataFrame containing sample
-        sample: Name of sample in the index of the DataFrame
+        sample_name: Name of sample in the index of the DataFrame
 
     Returns:
         Sample vector
@@ -51,10 +51,10 @@ def get_sample(df_path: str, sample: str) -> pd.Series:
         except:
             raise RuntimeError(f"Failed to open DataFrame: {df_path}")
 
-    if sample in df.index:
-        return df.loc[sample]
+    if sample_name in df.index:
+        return df.loc[sample_name]
     else:
-        raise RuntimeError(f"Sample {sample} not located in index of DataFrame {df_path}")
+        raise RuntimeError(f"Sample {sample_name} not located in index of DataFrame {df_path}")
 
 
 def load_df(df_path: str) -> pd.DataFrame:
