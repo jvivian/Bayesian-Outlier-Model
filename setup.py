@@ -22,6 +22,6 @@ setup(name='Bayesian-Outlier-Model',
       ],
       entry_points='''
             [console_scripts]
-            outlier-model=main.py:cli
+            outlier-model=main:cli
       ''',
       )
