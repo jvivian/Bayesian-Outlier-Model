@@ -32,20 +32,20 @@ from lib import select_k_best_genes
 @click.option('--num-training-genes', 'n_train', default=50, type=int, show_default=True,
               help='If gene-list is empty, will use SelectKBest to choose gene set.')
 def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_train):
-    # Parse training genes
-    genes = background[col_skip:]
-    if gene_list is None:
-        print('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)')
-        training_genes = select_k_best_genes(background, genes, group=group, n=n_train)
-    else:
-        with open(gene_list, 'r') as f:
-            training_genes = [x.strip() for x in f.readlines()]
-
     # Load input data
     print('Loading input data')
     sample = get_sample(sample, name)
     df = load_df(background)
     df = df.sort_values(group)
+
+    # Parse training genes
+    genes = df[int(col_skip):]
+    if gene_list is None:
+        print('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)')
+        training_genes = select_k_best_genes(df, genes, group=group, n=n_train)
+    else:
+        with open(gene_list, 'r') as f:
+            training_genes = [x.strip() for x in f.readlines()]
 
     # Select training set
     print('Selecting training set')
