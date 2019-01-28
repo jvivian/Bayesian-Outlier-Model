@@ -39,7 +39,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     df = df.sort_values(group)
 
     # Parse training genes
-    genes = df.columns[int(col_skip):]
+    genes = df.columns[col_skip:]
     if gene_list is None:
         print('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)')
         training_genes = select_k_best_genes(df, genes, group=group, n=n_train)
@@ -69,7 +69,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     fig.savefig(traceplot_out)
 
     # Weight plot
-    classes = df[group].unique()
+    classes = train_set[group].unique()
     weight_out = os.path.join(out_dir, 'weights.png')
     plot_weights(classes, trace, output=weight_out)
 
