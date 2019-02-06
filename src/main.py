@@ -42,6 +42,10 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     click.clear()
     click.secho('Bayesian Gene Expression Outlier Model', fg='green', bg='black', bold=True)
 
+    # Output
+    out_dir = os.path.join(out_dir, name)
+    os.makedirs(out_dir, exist_ok=True)
+
     # Load input data
     click.echo('Loading input data')
     sample = get_sample(sample, name)
@@ -71,10 +75,6 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
                         fg='yellow')
             training_genes += select_k_best_genes(train_set, genes, group=group, n=diff)
             training_genes = sorted(set(training_genes))
-
-    # Output
-    out_dir = os.path.join(out_dir, name)
-    os.makedirs(out_dir, exist_ok=True)
 
     # Run Model
     model, trace = run_model(sample, train_set, training_genes, group=group)
