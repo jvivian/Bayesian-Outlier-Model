@@ -194,6 +194,7 @@ def plot_weights(groups: List[str], trace, output: str = None):
     plt.title('Median Beta Coefficient Weight by Tissue for N-of-1 Sample')
     if output:
         plt.savefig(output, bbox_inches='tight')
+    return weights
 
 
 def posterior_predictive_check(trace, genes: List[str]) -> Dict[str, np.array]:

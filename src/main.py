@@ -85,10 +85,10 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     traceplot_out = os.path.join(out_dir, 'traceplot.png')
     fig.savefig(traceplot_out)
 
-    # Weight plot
+    # Weight plot and weight table
     classes = train_set[group].unique()
-    weight_out = os.path.join(out_dir, 'weights.png')
-    plot_weights(classes, trace, output=weight_out)
+    weights = plot_weights(classes, trace, output=os.path.join(out_dir, 'weights.png'))
+    weights.to_csv(os.path.join(out_dir, 'weights.tsv'), sep='\t')
 
     # PPC / PPP
     ppc = posterior_predictive_check(trace, training_genes)
