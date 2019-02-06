@@ -1,4 +1,5 @@
 import os
+import time
 import warnings
 
 import click
@@ -76,8 +77,13 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
             training_genes += select_k_best_genes(train_set, genes, group=group, n=diff)
             training_genes = sorted(set(training_genes))
 
-    # Run Model
+    # Run model and output runtime
+    t0 = time.time()
     model, trace = run_model(sample, train_set, training_genes, group=group)
+    runtime = round((time.time() - t0) / 60, 2)
+    unit = 'min' if runtime < 60 else 'hr'
+    runtime = runtime if runtime < 60 else round(runtime / 60, 2)
+    click.secho(f'Model runtime: {runtime} ({unit})', fg='green')
 
     # Traceplot
     fig, axarr = plt.subplots(3, 2, figsize=(10, 5))
