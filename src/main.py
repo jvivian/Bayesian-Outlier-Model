@@ -32,9 +32,13 @@ warnings.filterwarnings('ignore')
               help='Number of metadata columns to skip in background matrix so remainder are genes')
 @click.option('--num-backgrounds', 'n_bg', default=5, type=int, show_default=True,
               help='Number of background categorical groups to include in the model training')
+@click.option('--max-genes', default=100, type=int, show_default=True,
+              help='Maximum number of genes to run. I.e. if a gene list is input, how many additional'
+                   'genes to add via SelectKBest. Useful for improving beta coefficients'
+                   'if gene list does not contain enough tissue-specific genes.')
 @click.option('--num-training-genes', 'n_train', default=50, type=int, show_default=True,
               help='If gene-list is empty, will use SelectKBest to choose gene set.')
-def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_train):
+def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max_genes, n_train):
     click.clear()
     click.secho('Bayesian Gene Expression Outlier Model', fg='green', bg='black', bold=True)
 
@@ -52,6 +56,11 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, n_t
     else:
         with open(gene_list, 'r') as f:
             training_genes = [x.strip() for x in f.readlines()]
+        # Pad training genes with additional genes from SelectKBest based on `max-genes` argument
+        if len(training_genes) < max_genes:
+            diff = max_genes - len(training_genes)
+            training_genes += select_k_best_genes(df, genes, group=group, n=diff)
+            training_genes = sorted(set(training_genes))
 
     # Output
     out_dir = os.path.join(out_dir, name)
