@@ -47,24 +47,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     sample = get_sample(sample, name)
     df = load_df(background)
     df = df.sort_values(group)
-
-    # Parse training genes
     genes = df.columns[col_skip:]
-    if gene_list is None:
-        click.secho('No gene list provided. Selecting genes via SelectKBest (ANOVA F-value)', fg='yellow')
-        training_genes = select_k_best_genes(df, genes, group=group, n=n_train)
-    else:
-        with open(gene_list, 'r') as f:
-            training_genes = [x.strip() for x in f.readlines()]
-        # Pad training genes with additional genes from SelectKBest based on `max-genes` argument
-        if len(training_genes) < max_genes:
-            diff = max_genes - len(training_genes)
-            training_genes += select_k_best_genes(df, genes, group=group, n=diff)
-            training_genes = sorted(set(training_genes))
-
-    # Output
-    out_dir = os.path.join(out_dir, name)
-    os.makedirs(out_dir, exist_ok=True)
 
     # Select training set
     click.echo('Selecting training set')
@@ -72,7 +55,26 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     ranks_out = os.path.join(out_dir, 'ranks.tsv')
     ranks.to_csv(ranks_out, sep='\t')
     n_bg = n_bg if n_bg < len(ranks) else len(ranks)
-    train_set = df[df[group].isin(ranks.head(n_bg).Group)]
+    train_set = df[df[group].isin(ranks.head(n_bg)['Group'])]
+
+    # Parse training genes
+    if gene_list is None:
+        click.secho(f'No gene list provided. Selecting {n_train} genes via SelectKBest (ANOVA F-value)', fg='yellow')
+        training_genes = select_k_best_genes(train_set, genes, group=group, n=n_train)
+    else:
+        with open(gene_list, 'r') as f:
+            training_genes = [x.strip() for x in f.readlines() if x]
+        # Pad training genes with additional genes from SelectKBest based on `max-genes` argument
+        if len(training_genes) < max_genes:
+            diff = max_genes - len(training_genes)
+            click.secho(f'Adding {diff} genes via SelectKBest (ANOVA F-value) to reach {max_genes} total genes',
+                        fg='yellow')
+            training_genes += select_k_best_genes(train_set, genes, group=group, n=diff)
+            training_genes = sorted(set(training_genes))
+
+    # Output
+    out_dir = os.path.join(out_dir, name)
+    os.makedirs(out_dir, exist_ok=True)
 
     # Run Model
     model, trace = run_model(sample, train_set, training_genes, group=group)
