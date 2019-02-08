@@ -94,6 +94,9 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     # Weight plot and weight table
     classes = train_set[group].unique()
     weights = plot_weights(classes, trace, output=os.path.join(out_dir, 'weights.png'))
+    # Convert weights to summarized information of median and std
+    weights = weights.groupby('Class').agg({'Weights': ['median', 'std']})
+    weights = weights.sort_values(('Weights', 'median'), ascending=False)
     weights.to_csv(os.path.join(out_dir, 'weights.tsv'), sep='\t')
 
     # PPC / PPP
