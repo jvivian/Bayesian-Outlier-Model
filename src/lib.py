@@ -5,7 +5,6 @@ import click
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pymc3 as pm
 import scipy.stats as st
 import seaborn as sns
 from sklearn.feature_selection import SelectKBest
@@ -121,6 +120,9 @@ def run_model(sample: pd.Series,
     Returns:
         Model and Trace from PyMC3
     """
+    # Importing here since Theano base_compiledir needs to be set prior to import
+    import pymc3 as pm
+
     classes = sorted(df[group].unique())
     df = df[[group] + training_genes]
 

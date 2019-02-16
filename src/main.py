@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 import warnings
 
@@ -13,7 +14,6 @@ from lib import pickle_model
 from lib import plot_weights
 from lib import posterior_predictive_check
 from lib import posterior_predictive_pvals
-from lib import run_model
 from lib import select_k_best_genes
 
 warnings.filterwarnings('ignore')
@@ -44,8 +44,9 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     click.secho('Bayesian Gene Expression Outlier Model', fg='green', bg='black', bold=True)
 
     # Output
-    out_dir = os.path.join(out_dir, name)
-    os.makedirs(out_dir, exist_ok=True)
+    out_dir = os.path.abspath(os.path.join(out_dir, name))
+    theano_dir = os.path.join(out_dir, '.theano')
+    os.makedirs(theano_dir, exist_ok=True)
 
     # Load input data
     click.echo('Loading input data')
@@ -76,6 +77,10 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
                         fg='yellow')
             training_genes += select_k_best_genes(train_set, genes, group=group, n=diff)
             training_genes = sorted(set(training_genes))
+
+    # Set env variable for base_compiledir before importing model
+    os.environ['THEANO_FLAGS'] = f'base_compiledir={theano_dir}'
+    from lib import run_model
 
     # Run model and output runtime
     t0 = time.time()
@@ -108,3 +113,6 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     # Save Model
     model_out = os.path.join(out_dir, 'model.pkl')
     pickle_model(model_out, model, trace)
+
+    # Cleanup
+    shutil.rmtree(theano_dir)
