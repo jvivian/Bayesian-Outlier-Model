@@ -1,6 +1,7 @@
 import os
 import shutil
 import time
+import warnings
 
 import click
 import matplotlib.pyplot as plt
@@ -14,6 +15,8 @@ from outlier_model.lib import plot_weights
 from outlier_model.lib import posterior_predictive_check
 from outlier_model.lib import posterior_predictive_pvals
 from outlier_model.lib import select_k_best_genes
+
+warnings.filterwarnings('ignore')
 
 
 @click.command()
