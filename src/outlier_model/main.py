@@ -1,22 +1,19 @@
 import os
 import shutil
 import time
-import warnings
 
 import click
 import matplotlib.pyplot as plt
 import pymc3 as pm
 
-from lib import get_sample
-from lib import load_df
-from lib import pairwise_distance_ranks
-from lib import pickle_model
-from lib import plot_weights
-from lib import posterior_predictive_check
-from lib import posterior_predictive_pvals
-from lib import select_k_best_genes
-
-warnings.filterwarnings('ignore')
+from outlier_model.lib import get_sample
+from outlier_model.lib import load_df
+from outlier_model.lib import pairwise_distance_ranks
+from outlier_model.lib import pickle_model
+from outlier_model.lib import plot_weights
+from outlier_model.lib import posterior_predictive_check
+from outlier_model.lib import posterior_predictive_pvals
+from outlier_model.lib import select_k_best_genes
 
 
 @click.command()
@@ -80,7 +77,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
 
     # Set env variable for base_compiledir before importing model
     os.environ['THEANO_FLAGS'] = f'base_compiledir={theano_dir}'
-    from lib import run_model
+    from outlier_model.lib import run_model
 
     # Run model and output runtime
     t0 = time.time()
