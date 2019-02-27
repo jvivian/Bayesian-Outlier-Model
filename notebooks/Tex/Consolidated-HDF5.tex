@@ -1,0 +1,605 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Consolidated-HDF5}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \section{Consolidated HDF5 Object}\label{consolidated-hdf5-object}
+
+Contains:
+
+\begin{itemize}
+\tightlist
+\item
+  TCGA and GTEx Expression (Samples by Genes in TPM)
+\item
+  TCGA Metadata
+\item
+  GTEx Metadata
+\item
+  Intersectional Metadata
+\item
+  Drug Information
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn12117384}
+        \PY{n}{exp} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}hdf}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/mnt/data/Expression/tcga\PYZus{}gtex\PYZus{}tpm.hd5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn12117386}
+        \PY{n}{tcga\PYZus{}path} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Metadata\PYZhy{}collation/output/tcga\PYZhy{}metadata\PYZhy{}cleaned.tsv}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{tcga\PYZus{}met} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{tcga\PYZus{}path}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn12117387}
+        \PY{n}{gtex\PYZus{}path} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Metadata\PYZhy{}collation/input\PYZus{}data/gtex\PYZhy{}sample\PYZhy{}metadata.tsv}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{gtex\PYZus{}met} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{gtex\PYZus{}path}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn11363589}
+        \PY{n}{met\PYZus{}path} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/mnt/data/Metadata/tcga\PYZus{}gtex\PYZus{}metadata\PYZus{}intersect.tsv}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{met} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{met\PYZus{}path}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn12117759}
+        \PY{n}{drug\PYZus{}path} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/mnt/data/Metadata/drug\PYZus{}biomarkers.tsv}\PY{l+s+s1}{\PYZsq{}}
+        \PY{n}{drug} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{drug\PYZus{}path}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Synapse ID: syn12246910}
+        \PY{n}{pairing} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/subtype\PYZhy{}pairings.tsv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Gene Expression}\label{gene-expression}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n+nb}{print} \PY{n}{exp}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{exp}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(18295, 58581)
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}2}]:}                           5S\_rRNA  5\_8S\_rRNA  7SK       A1BG  A1BG-AS1  A1CF  \textbackslash{}
+        GTEX-UTHO-1226-SM-3GAEE       0.0        0.0  0.0  11.079876  1.029968  0.00   
+        GTEX-146FH-1726-SM-5QGQ2      0.0        0.0  0.0   9.469890  2.459924  0.01   
+        
+                                         A2M   A2M-AS1       A2ML1  A2ML1-AS1  \textbackslash{}
+        GTEX-UTHO-1226-SM-3GAEE   199.478958  0.609981    0.049999        0.0   
+        GTEX-146FH-1726-SM-5QGQ2   95.961578  0.869973  433.863281        0.0   
+        
+                                     {\ldots}      snoU2-30  snoU2\_19  snoU83B  snoZ196  \textbackslash{}
+        GTEX-UTHO-1226-SM-3GAEE      {\ldots}           0.0       0.0      0.0      0.0   
+        GTEX-146FH-1726-SM-5QGQ2     {\ldots}           0.0       0.0      0.0      0.0   
+        
+                                  snoZ278  snoZ40  snoZ6  snosnR66    uc\_338  \textbackslash{}
+        GTEX-UTHO-1226-SM-3GAEE       0.0     0.0    0.0       0.0  9.360242   
+        GTEX-146FH-1726-SM-5QGQ2      0.0     0.0    0.0       0.0  7.369859   
+        
+                                  yR211F11.2  
+        GTEX-UTHO-1226-SM-3GAEE          0.0  
+        GTEX-146FH-1726-SM-5QGQ2         0.0  
+        
+        [2 rows x 58581 columns]
+\end{Verbatim}
+            
+    \subsection{TCGA Metadata}\label{tcga-metadata}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print} \PY{n}{tcga\PYZus{}met}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{tcga\PYZus{}met}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(11190, 31)
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}3}]:}                       submitter\_id  reads\_downloaded  mapped\_read\_count  \textbackslash{}
+        TCGA-CD-8534-01A  TCGA-CD-8534-01A         240016440          207116695   
+        TCGA-ER-A19A-06A  TCGA-ER-A19A-06A         179705496          178311442   
+        
+                                  auc        platform     file\_size center\_short  \textbackslash{}
+        TCGA-CD-8534-01A  15223006507  Illumina HiSeq  1.570993e+10        BCGSC   
+        TCGA-ER-A19A-06A   8517492780  Illumina HiSeq  7.741969e+09          UNC   
+        
+                                tissue\_source\_site  aliquots\_concentration  \textbackslash{}
+        TCGA-CD-8534-01A                    ILSBio                    0.15   
+        TCGA-ER-A19A-06A  University of Pittsburgh                    0.17   
+        
+                          a260\_a280\_ratio       {\ldots}        years\_smoked height  \textbackslash{}
+        TCGA-CD-8534-01A              NaN       {\ldots}                 NaN    NaN   
+        TCGA-ER-A19A-06A              1.7       {\ldots}                 NaN    NaN   
+        
+                          year\_of\_diagnosis             project\_name primary\_site  \textbackslash{}
+        TCGA-CD-8534-01A             2011.0   Stomach Adenocarcinoma      Stomach   
+        TCGA-ER-A19A-06A             2006.0  Skin Cutaneous Melanoma         Skin   
+        
+                          tumor\_stage  vital\_status    sample\_type  \textbackslash{}
+        TCGA-CD-8534-01A     stage ii         alive  Primary Tumor   
+        TCGA-ER-A19A-06A     stage iv         alive     Metastatic   
+        
+                          new\_tumor\_event\_after\_initial\_treatment pathologic\_stage  
+        TCGA-CD-8534-01A                                       NO         Stage II  
+        TCGA-ER-A19A-06A                                      YES         Stage IV  
+        
+        [2 rows x 31 columns]
+\end{Verbatim}
+            
+    \subsection{GTEx Metadata}\label{gtex-metadata}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{print} \PY{n}{gtex\PYZus{}met}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{gtex\PYZus{}met}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(9662, 300)
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:}                 Run  RailRnaBatchNumber  \textbackslash{}
+        rail\_id                                   
+        3864      SRR660824                  19   
+        3865     SRR2166176                  19   
+        
+                                                        BigWigPath  dbGaP\_Subject\_ID  \textbackslash{}
+        rail\_id                                                                        
+        3864     /dcl01/leek/data/gtex/batch\_19/coverage\_bigwig{\ldots}            678145   
+        3865     /dcl01/leek/data/gtex/batch\_19/coverage\_bigwig{\ldots}            706551   
+        
+                 dbGaP\_Sample\_ID     SUBJID                        SAMPID  \textbackslash{}
+        rail\_id                                                             
+        3864              914544  GTEX-QMR6       GTEX-QMR6-1926-SM-32PL9   
+        3865             1664018  GTEX-T5JC  GTEX-T5JC-0011-R11A-SM-5S2RX   
+        
+                                       SAMPLE\_USE   ReleaseDate      LoadDate  \textbackslash{}
+        rail\_id                                                                 
+        3864     Seq\_RNA\_WTSS; Seq\_RNA\_Expression  Feb 02, 2013  Oct 03, 2014   
+        3865     Seq\_RNA\_WTSS; Seq\_RNA\_Expression  Oct 06, 2015  Sep 11, 2015   
+        
+                  {\ldots}     MHTTOO12M  MHTTOONP  MHTXCEXP  MHUK8096  MHUREMIA MHWKNSSU  \textbackslash{}
+        rail\_id   {\ldots}                                                                  
+        3864      {\ldots}           0.0       0.0       0.0       0.0       0.0      0.0   
+        3865      {\ldots}           0.0       0.0       0.0       0.0       0.0      0.0   
+        
+                MHWNVCT MHWNVHX MHWTLSUA MHWTLSUB  
+        rail\_id                                    
+        3864        0.0     0.0      0.0      0.0  
+        3865        0.0     0.0      0.0      0.0  
+        
+        [2 rows x 300 columns]
+\end{Verbatim}
+            
+    \subsection{TCGA/GTEx Intersectional
+Metadata}\label{tcgagtex-intersectional-metadata}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{n+nb}{print} \PY{n}{met}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{met}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(20852, 16)
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}5}]:}                               id      reads       size\_MB        platform  \textbackslash{}
+        TCGA-CD-8534-01  TCGA-CD-8534-01  240016440  14982.158203  Illumina HiSeq   
+        TCGA-ER-A19A-06  TCGA-ER-A19A-06  179705496   7383.316781  Illumina HiSeq   
+        
+                          sex   tissue seq\_site  weight  height  mapped\_reads   race  \textbackslash{}
+        TCGA-CD-8534-01  male  Stomach    BCGSC     NaN     NaN   207116695.0  asian   
+        TCGA-ER-A19A-06  male     Skin      UNC     NaN     NaN   178311442.0  white   
+        
+                          age   qc dataset tumor                     type  
+        TCGA-CD-8534-01  40.0  0.0    tcga   yes   Stomach\_Adenocarcinoma  
+        TCGA-ER-A19A-06  83.0  4.0    tcga   yes  Skin\_Cutaneous\_Melanoma  
+\end{Verbatim}
+            
+    \subsection{Drug Information}\label{drug-information}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{drug}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}6}]:}              Approved Biomarker(s) [RESPONSIVE]  \textbackslash{}
+        Drug                                              
+        ATEZOLIZUMAB                                NaN   
+        DURVALUMAB                                  NaN   
+        
+                     Potential Biomarker(s) [RESPONSIVE]  \textbackslash{}
+        Drug                                               
+        ATEZOLIZUMAB                CD274 overexpression   
+        DURVALUMAB                  CD274 overexpression   
+        
+                     Approved Biomarker(s) [RESISTANT]  \textbackslash{}
+        Drug                                             
+        ATEZOLIZUMAB                               NaN   
+        DURVALUMAB                                 NaN   
+        
+                     Potential Biomarker(s) [RESISTANT] Main Target(s)  \textbackslash{}
+        Drug                                                             
+        ATEZOLIZUMAB                                NaN   PD-L1, BCL-2   
+        DURVALUMAB                                  NaN          PD-L1   
+        
+                     Other Target(s) Gene(s) Involved  \textbackslash{}
+        Drug                                            
+        ATEZOLIZUMAB             NaN      CD274, BCL2   
+        DURVALUMAB              B7-1      CD274, CD80   
+        
+                                                 Primary Cancer Type(s)  \textbackslash{}
+        Drug                                                              
+        ATEZOLIZUMAB  Locally advanced or metastatic (M1) urothelial{\ldots}   
+        DURVALUMAB    Locally advanced or metastatic urothelial carc{\ldots}   
+        
+                     Secondary Cancer Type(s) Clinical Trial Cancer Type(s)  \textbackslash{}
+        Drug                                                                  
+        ATEZOLIZUMAB                      NaN                           NaN   
+        DURVALUMAB                        NaN                           NaN   
+        
+                                  {\ldots}              Biomarker Paper  \textbackslash{}
+        Drug                      {\ldots}                                
+        ATEZOLIZUMAB              {\ldots}                          NaN   
+        DURVALUMAB                {\ldots}                          NaN   
+        
+                                                  Pharmocology Synopsis  \textbackslash{}
+        Drug                                                              
+        ATEZOLIZUMAB  Atezolizumab is a humanized monoclonal immunog{\ldots}   
+        DURVALUMAB    Durvalumab is a programmed death-ligand 1 (PD-{\ldots}   
+        
+                     Grouping of drugs →            Drug Type Subtype/Target Class  \textbackslash{}
+        Drug                                                                         
+        ATEZOLIZUMAB                 NaN  Monoclonal antibody                  CAM   
+        DURVALUMAB                   NaN  Monoclonal antibody                  NaN   
+        
+                      Class/Family (if applicable) Mechanism of Action  \textbackslash{}
+        Drug                                                             
+        ATEZOLIZUMAB                           NaN    CD274-inhibition   
+        DURVALUMAB                             NaN    CD274-inhibition   
+        
+                     Pathway(s) Affected Notes Biomarker(s) for Sankey Graph  
+        Drug                                                                  
+        ATEZOLIZUMAB      PD-1 signaling   NaN          CD274 overexpression  
+        DURVALUMAB        PD-1 signaling   NaN          CD274 overexpression  
+        
+        [2 rows x 23 columns]
+\end{Verbatim}
+            
+    \subsection{Subtype Pairings}\label{subtype-pairings}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{pairing}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:}                                 Tumor                              Normal  \textbackslash{}
+        0              Acute\_Myeloid\_Leukemia                                 NaN   
+        1                                 NaN                                 NaN   
+        2                                 NaN                                 NaN   
+        3            Adrenocortical\_Carcinoma                                 NaN   
+        4  Pheochromocytoma\_and\_Paraganglioma  Pheochromocytoma\_and\_Paraganglioma   
+        
+                                     GTEx  
+        0  Cells\_Leukemia\_cell\_line\_(CML)  
+        1            Adipose\_Subcutaneous  
+        2      Adipose\_Visceral\_(Omentum)  
+        3                   Adrenal\_Gland  
+        4                   Adrenal\_Gland  
+\end{Verbatim}
+            
+    \section{Write Consolidated HDF}\label{write-consolidated-hdf}
+
+\textbf{Key: Value} - exp: TCGA and GTEX gene expression (TPM) - tcga:
+TCGA Metadata - gtex: GTEx Metadata - met: TCGA/GTEx intersectional
+metadata - drug: Antineoplastic biomarkers and more
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{output\PYZus{}hdf} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/mnt/data/Objects/tcga\PYZus{}gtex\PYZus{}data.hd5}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{exp}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{exp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{tcga\PYZus{}met}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tcga}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{gtex\PYZus{}met}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gtex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{met}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{met}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{drug}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{drug}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{pairing}\PY{o}{.}\PY{n}{to\PYZus{}hdf}\PY{p}{(}\PY{n}{output\PYZus{}hdf}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pairing}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
