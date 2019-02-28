@@ -133,7 +133,7 @@ def run_model(sample: pd.Series,
             cat_mu, cat_sd = st.norm.fit(df[df[group] == dataset][gene])
             # Standard deviation can't be initialized to 0, so set to 0.1
             cat_sd = 0.1 if cat_sd == 0 else cat_sd
-            ys[f'{gene}-{dataset}'] = (cat_mu, cat_sd)
+            ys[f'{gene}={dataset}'] = (cat_mu, cat_sd)
 
     click.echo('Building model')
     with pm.Model() as model:
@@ -147,7 +147,7 @@ def run_model(sample: pd.Series,
         for gene in tqdm(training_genes):
             mu = a
             for i, dataset in enumerate(classes):
-                name = f'{gene}-{dataset}'
+                name = f'{gene}={dataset}'
                 y = pm.Normal(name, *ys[name])
                 mu += b[i] * y
 
@@ -227,7 +227,7 @@ def _gene_ppc(trace, gene: str) -> np.array:
     Returns:
         Random variates representing PPC of the gene
     """
-    y_gene = [x for x in trace.varnames if x.startswith(f'{gene}-')]
+    y_gene = [x for x in trace.varnames if x.startswith(f'{gene}=')]
     b = trace['a']
     for i, y_name in enumerate(y_gene):
         b += trace['b'][:, i] * trace[y_name]
