@@ -7,15 +7,15 @@ from toil.job import Job
 from toil.lib.docker import dockerCall
 
 
-def workflow(job, args):
+def workflow(job, name, args):
     sample_id = job.fileStore.writeGlobalFile(args.sample)
     background_id = job.fileStore.writeGlobalFile(args.background)
     gene_id = job.fileStore.writeGlobalFile(args.gene_list)
 
-    job.addChildJobFn(run_outlier_model, sample_id, background_id, gene_id, args, cores=4, memory='10G')
+    job.addChildJobFn(run_outlier_model, name, sample_id, background_id, gene_id, args, cores=4, memory='10G')
 
 
-def run_outlier_model(job, sample_id, background_id, gene_id, args):
+def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
     # Process names with flexible extensions
     sample_ext = os.path.splitext(args.sample)[1]
     sample_name = 'sample_matrix{}'.format(sample_ext)
@@ -30,14 +30,14 @@ def run_outlier_model(job, sample_id, background_id, gene_id, args):
     # Define parameters and call Docker container
     parameters = ['--sample', '/data/{}'.format(sample_name),
                   '--background', '/data/{}'.format(bg_name),
-                  '--name', args.name,
+                  '--name', name,
                   '--gene-list', '/data/gene-list.txt',
                   '--out-dir', '/data',
                   '--group', args.group,
-                  '--col-skip', args.col_skip,
-                  '--num-backgrounds', args.num_backgrounds,
-                  '--max-genes', args.max_genes,
-                  '--num-training-genes', args.num_training_genes]
+                  '--col-skip', str(args.col_skip),
+                  '--num-backgrounds', str(args.num_backgrounds),
+                  '--max-genes', str(args.max_genes),
+                  '--num-training-genes', str(args.num_training_genes)]
     dockerCall(job=job, tool='jvivian/bayesian-outlier-model:1.0a2', workDir=job.tempDir, parameters=parameters)
 
     out_dir = os.path.join(job.tempDir, args.name)
@@ -47,24 +47,24 @@ def run_outlier_model(job, sample_id, background_id, gene_id, args):
 def cli():
     parser = argparse.ArgumentParser(description=main.__doc__, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--sample', required=True, type=str, help='Sample(s) by Genes matrix (csv/tsv/hd5)')
-    parser.add_argument('--background', requried=True, type=str,
+    parser.add_argument('--background', required=True, type=str,
                         help='Samples by Genes matrix with metadata columns first (including a group column that '
                              'discriminates samples by some category) (csv/tsv/hd5)')
     parser.add_argument('--manifest', required=True, type=str,
                         help='Single column file of sample names in sample matrix')
     parser.add_argument('--gene-list', type=str, help='Single column file of genes to use for training')
     parser.add_argument('--out-dir', default='.', type=str, help='Output directory')
-    parser.add_argument('--group', default='tissue', show_default=True, type=str,
+    parser.add_argument('--group', default='tissue', type=str,
                         help='Categorical column vector in the background matrix')
-    parser.add_argument('--col-skip', default=1, show_default=True, type=int,
+    parser.add_argument('--col-skip', default=1, type=int,
                         help='Number of metadata columns to skip in background matrix so remainder are genes')
-    parser.add_argument('--num-backgrounds', default=5, type=int, show_default=True,
+    parser.add_argument('--num-backgrounds', default=5, type=int,
                         help='Number of background categorical groups to include in the model training')
-    parser.add_argument('--max-genes', default=100, type=int, show_default=True,
+    parser.add_argument('--max-genes', default=100, type=int,
                         help='Maximum number of genes to run. I.e. if a gene list is input, how many additional'
                              'genes to add via SelectKBest. Useful for improving beta coefficients'
                              'if gene list does not contain enough tissue-specific genes.')
-    parser.add_argument('--num-training-genes', default=50, type=int, show_default=True,
+    parser.add_argument('--num-training-genes', default=50, type=int,
                         help='If gene-list is empty, will use SelectKBest to choose gene set.')
 
     # Add Toil options
@@ -114,12 +114,10 @@ def partitions(l, partition_size):
 
 def main():
     args = cli()
-    samples = [x.strip() for x in open(args.manifest, 'r').readlines() if x]
+    samples = [x.strip() for x in open(args.manifest, 'r').readlines() if not x.isspace()]
 
     # Start Toil run
-    parser = Job.Runner.getDefaultArgumentParser()
-    options = parser.parse_args()
-    with Toil(options) as toil:
+    with Toil(args) as toil:
         if not toil.options.restart:
             toil.start(Job.wrapJobFn(map_job, workflow, samples, args))
         else:
