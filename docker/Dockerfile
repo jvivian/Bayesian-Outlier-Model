@@ -1,8 +1,8 @@
-FROM python:3
+FROM continuumio/anaconda3
 
 RUN apt-get update && apt-get install -y libhdf5-serial-dev
 
-RUN pip install Bayesian-Outlier-Model==1.0a3
+RUN pip install Bayesian-Outlier-Model==1.0a4
 
 RUN mkdir /data
 WORKDIR /data
