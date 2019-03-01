@@ -11,4 +11,4 @@ twine upload dist/*
 
 # Clean up
 rm -r dist
-rm -r src/rnaseq_lib3.egg-info
+rm -r src/Bayesian_Outlier_Model.egg-info
