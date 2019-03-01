@@ -38,7 +38,7 @@ def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
                   '--num-backgrounds', str(args.num_backgrounds),
                   '--max-genes', str(args.max_genes),
                   '--num-training-genes', str(args.num_training_genes)]
-    dockerCall(job=job, tool='jvivian/bayesian-outlier-model:1.0a2', workDir=job.tempDir, parameters=parameters)
+    dockerCall(job=job, tool='jvivian/bayesian-outlier-model:1.0a4', workDir=job.tempDir, parameters=parameters)
 
     out_dir = os.path.join(job.tempDir, args.name)
     shutil.move(out_dir, args.out_dir)
