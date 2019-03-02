@@ -17,7 +17,7 @@ This workflow takes gene expression data as input and outputs the following:
     ├── weights.png
     └── weights.tsv
 
-- **model.pkl** is a python pickle of the [PyMC3](https://docs.pymc.io) `model` and `trace`. Can be retrieved via
+- **model.pkl** - A python pickle of the [PyMC3](https://docs.pymc.io) `model` and `trace`. Can be retrieved via
     ```python
         with open(pkl_path, 'rb') as buff:
             data = pickle.load(buff)
