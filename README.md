@@ -39,9 +39,9 @@ This workflow takes gene expression data as input and outputs the following:
     ```bash
     outlier-model --sample /data/tumor.hd5 \
             --background /data/gtex.hd5 \
-            --name=TCGA-OR-A5KV-01 \
+            --name TCGA-OR-A5KV-01 \
             --gene-list /data/drug-gene-list.txt \
-            --col-skip=5
+            --col-skip 5
     ```
 
 # Dependencies and Installation
