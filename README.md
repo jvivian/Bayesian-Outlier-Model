@@ -17,17 +17,17 @@ This workflow takes gene expression data as input and outputs the following:
     ├── weights.png
     └── weights.tsv
 
-- **model.pkl** - A python pickle of the [PyMC3](https://docs.pymc.io) `model` and `trace`. Can be retrieved via
+- **model.pkl** — A python pickle of the [PyMC3](https://docs.pymc.io) `model` and `trace`. Can be retrieved via
     ```python
         with open(pkl_path, 'rb') as buff:
             data = pickle.load(buff)
         return data['model'], data['trace']
     ```
 - **pvals.tsv** — P-values for all genes the model was trained on
-- **ranks.tsv** - The median rank of all groups as measured by pairwise euclidean distance
-- **traceplot.png** - Traceplot from PyMC3 linear model coefficients and model error
-- **weights.png** - Boxplot of model weights for all background datasets
-- **weights.tsv** - Average and sd of model weights as related to background datasets
+- **ranks.tsv** — The median rank of all groups as measured by pairwise euclidean distance
+- **traceplot.png** — Traceplot from PyMC3 linear model coefficients and model error
+- **weights.png** — Boxplot of model weights for all background datasets
+- **weights.tsv** — Average and sd of model weights as related to background datasets
 
 # Quickstart
 1. Install
