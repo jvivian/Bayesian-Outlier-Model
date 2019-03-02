@@ -3,7 +3,7 @@
 This package identifies outliers for gene expression data by building a consensus distribution from background datasets that are informed by an N-of-1 sample. 
 See [Model Explanation](#model-explanation) for more information.
 
-![Protocol](/imgs/Experimental-Protocol.png)
+<img src="/imgs/Experimental-Protocol.png" height="50%" width="50%">
 
 This workflow takes gene epxression data as input and outputs the following:
 
@@ -37,7 +37,7 @@ This workflow has been tested on ubuntu 18.04 and Mac OSX, but should also run o
 
 In the following plate notation, G stands for Gene, and D stands for Dataset (background dataset).
 
-![Plate Model](/imgs/Plate-Notation.png)
+<img src="/imgs/Plate-Notation.png" height="50%" width="50%">
 
 We build a consensus distribution for a gene by dynamically generating one linear model per gene, where the independent 
 variables represent different background dataset’s expression for that gene. 
