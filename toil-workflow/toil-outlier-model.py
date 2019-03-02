@@ -10,7 +10,7 @@ from toil.lib.docker import dockerCall
 def workflow(job, name, args):
     sample_id = job.fileStore.writeGlobalFile(args.sample)
     background_id = job.fileStore.writeGlobalFile(args.background)
-    gene_id = job.fileStore.writeGlobalFile(args.gene_list)
+    gene_id = job.fileStore.writeGlobalFile(args.gene_list) if args.gene_list else None
 
     job.addChildJobFn(run_outlier_model, name, sample_id, background_id, gene_id, args, cores=4, memory='10G')
 
@@ -25,19 +25,21 @@ def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
     # Read in input file from jobStore
     job.fileStore.readGlobalFile(sample_id, os.path.join(job.tempDir, sample_name))
     job.fileStore.readGlobalFile(background_id, os.path.join(job.tempDir, bg_name))
-    job.fileStore.readGlobalFile(gene_id, os.path.join(job.tempDir, 'gene-list.txt'))
+    if gene_id:
+        job.fileStore.readGlobalFile(gene_id, os.path.join(job.tempDir, 'gene-list.txt'))
 
     # Define parameters and call Docker container
     parameters = ['--sample', '/data/{}'.format(sample_name),
                   '--background', '/data/{}'.format(bg_name),
                   '--name', name,
-                  '--gene-list', '/data/gene-list.txt',
                   '--out-dir', '/data',
                   '--group', args.group,
                   '--col-skip', str(args.col_skip),
                   '--num-backgrounds', str(args.num_backgrounds),
                   '--max-genes', str(args.max_genes),
                   '--num-training-genes', str(args.num_training_genes)]
+    if gene_id:
+        parameters.extend(['--gene-list', '/data/gene-list.txt'])
     dockerCall(job=job, tool='jvivian/bayesian-outlier-model:1.0a4', workDir=job.tempDir, parameters=parameters)
 
     out_dir = os.path.join(job.tempDir, args.name)
