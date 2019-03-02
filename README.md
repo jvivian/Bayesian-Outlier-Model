@@ -7,8 +7,27 @@ See [Model Explanation](#model-explanation) for more information.
 <img src="/imgs/Experimental-Protocol.png" height="50%" width="50%">
 </p>
 
-This workflow takes gene epxression data as input and outputs the following:
+This workflow takes gene expression data as input and outputs the following:
 
+    SAMPLE-UUID
+    ├── model.pkl
+    ├── pvals.tsv
+    ├── ranks.tsv
+    ├── traceplot.png
+    ├── weights.png
+    └── weights.tsv
+
+- **model.pkl** — A python pickle of the [PyMC3](https://docs.pymc.io) `model` and `trace`. Can be retrieved via
+    ```python
+        with open(pkl_path, 'rb') as buff:
+            data = pickle.load(buff)
+        return data['model'], data['trace']
+    ```
+- **pvals.tsv** — P-values for all genes the model was trained on
+- **ranks.tsv** — The median rank of all groups as measured by pairwise euclidean distance
+- **traceplot.png** — Traceplot from PyMC3 linear model coefficients and model error
+- **weights.png** — Boxplot of model weights for all background datasets
+- **weights.tsv** — Average and sd of model weights as related to background datasets
 
 # Quickstart
 1. Install
@@ -20,9 +39,9 @@ This workflow takes gene epxression data as input and outputs the following:
     ```bash
     outlier-model --sample /data/tumor.hd5 \
             --background /data/gtex.hd5 \
-            --name=TCGA-OR-A5KV-01 \
+            --name TCGA-OR-A5KV-01 \
             --gene-list /data/drug-gene-list.txt \
-            --col-skip=5
+            --col-skip 5
     ```
 
 # Dependencies and Installation
@@ -74,4 +93,4 @@ docker run --rm -v $(pwd):/data jvivian/bayesian-outlier-model:1.0a4 \
 
 # Toil-version of Workflow
 
-A [Toil](https://toil.readthedocs.io/) version of the workflow is available [here](https://github.com/jvivian/Bayesian-Outlier-Model/blob/master/toil-workflow/toil-outlier-model.py). This allows the model to be run on multiple samples at scale on a cluster or cloud computing cluster.
+A [Toil](https://toil.readthedocs.io/) version of the workflow is available [here](https://github.com/jvivian/Bayesian-Outlier-Model/blob/master/toil-workflow/toil-outlier-model.py). This allows the model to be run on multiple samples at scale on a cluster or cloud computing cluster, but requires Python 2.7. 
