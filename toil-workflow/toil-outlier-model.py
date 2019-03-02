@@ -4,7 +4,7 @@ import shutil
 
 from toil.common import Toil
 from toil.job import Job
-from toil.lib.docker import dockerCall
+from toil.lib.docker import apiDockerCall, _fixPermissions
 
 
 def workflow(job, name, args):
@@ -40,9 +40,15 @@ def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
                   '--num-training-genes', str(args.num_training_genes)]
     if gene_id:
         parameters.extend(['--gene-list', '/data/gene-list.txt'])
-    dockerCall(job=job, tool='jvivian/bayesian-outlier-model:1.0a4', workDir=job.tempDir, parameters=parameters)
+    image = 'jvivian/bayesian-outlier-model:1.0a4'
+    apiDockerCall(job=job,
+                  image=image,
+                  working_dir=job.tempDir,
+                  parameters=parameters,
+                  user='root')
+    _fixPermissions(tool=image, workDir=job.tempDir)
 
-    out_dir = os.path.join(job.tempDir, args.name)
+    out_dir = os.path.join(job.tempDir, name)
     shutil.move(out_dir, args.out_dir)
 
 
