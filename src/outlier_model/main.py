@@ -69,7 +69,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
         training_genes = select_k_best_genes(train_set, genes, group=group, n=n_train)
     else:
         with open(gene_list, 'r') as f:
-            training_genes = [x.strip() for x in f.readlines() if x]
+            training_genes = [x.strip() for x in f.readlines() if not x.isspace()]
         # Pad training genes with additional genes from SelectKBest based on `max-genes` argument
         if len(training_genes) < max_genes:
             diff = max_genes - len(training_genes)
