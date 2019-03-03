@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='Bayesian-Outlier-Model',
-      version='1.0a4',
+      version='1.0a5',
       description='A Bayesian model for identifying outliers for N-of-1 samples in gene expression data',
       url='https://github.com/jvivian/Bayesian-Outlier-Model',
       author='John Vivian',
