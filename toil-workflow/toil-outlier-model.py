@@ -7,12 +7,13 @@ from toil.job import Job
 from toil.lib.docker import apiDockerCall, _fixPermissions
 
 
-def workflow(job, name, args):
+def workflow(job, samples, args):
     sample_id = job.fileStore.writeGlobalFile(args.sample)
     background_id = job.fileStore.writeGlobalFile(args.background)
     gene_id = job.fileStore.writeGlobalFile(args.gene_list) if args.gene_list else None
 
-    job.addChildJobFn(run_outlier_model, name, sample_id, background_id, gene_id, args, cores=4, memory='10G')
+    job.addChildJobFn(map_job, run_outlier_model, samples, sample_id, background_id, gene_id, args,
+                      cores=4, memory='10G')
 
 
 def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
@@ -80,7 +81,7 @@ def cli():
     return parser.parse_args()
 
 
-def map_job(job, func, inputs, *args):
+def map_job(job, func, inputs, *args, **kwargs):
     """
     Spawns a tree of jobs to avoid overloading the number of jobs spawned by a single parent.
     This function is appropriate to use when batching samples greater than 1,000.
@@ -96,10 +97,10 @@ def map_job(job, func, inputs, *args):
     partition_size = len(inputs) / num_partitions
     if partition_size > 1:
         for partition in partitions(inputs, partition_size):
-            job.addChildJobFn(map_job, func, partition, *args)
+            job.addChildJobFn(map_job, func, partition, *args, **kwargs)
     else:
         for sample in inputs:
-            job.addChildJobFn(func, sample, *args)
+            job.addChildJobFn(func, sample, *args, **kwargs)
 
 
 def partitions(l, partition_size):
@@ -127,7 +128,7 @@ def main():
     # Start Toil run
     with Toil(args) as toil:
         if not toil.options.restart:
-            toil.start(Job.wrapJobFn(map_job, workflow, samples, args))
+            toil.start(Job.wrapJobFn(workflow, samples, args))
         else:
             toil.restart()
 
