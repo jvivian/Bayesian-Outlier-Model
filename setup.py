@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='Bayesian-Outlier-Model',
-      version='1.0a5',
+      version='1.0a6',
       description='A Bayesian model for identifying outliers for N-of-1 samples in gene expression data',
       url='https://github.com/jvivian/Bayesian-Outlier-Model',
       author='John Vivian',
@@ -10,19 +10,17 @@ setup(name='Bayesian-Outlier-Model',
       package_dir={'': 'src'},
       packages=find_packages('src'),
       install_requires=[
-            'numpy',
-            'pymc3',
-            'pandas',
-            'tables',
-            'click',
-            'tqdm',
-            'matplotlib',
-            'scipy',
-            'seaborn',
-            'scikit-learn'
+          'numpy',
+          'pymc3',
+          'pandas',
+          'tables',
+          'click',
+          'tqdm',
+          'matplotlib',
+          'scipy',
+          'seaborn',
+          'scikit-learn'
       ],
-      entry_points='''
-            [console_scripts]
-            outlier-model=outlier_model.main:cli
-      ''',
-      )
+      entry_points=dict(console_scripts=[
+          'outlier-model=outlier_model.main:cli',
+          'outlier-model-mn-test=outlier_model.mn_test:cli']))

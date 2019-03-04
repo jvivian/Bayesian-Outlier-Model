@@ -16,7 +16,7 @@ def workflow(job, samples, args):
                       cores=4, memory='10G')
 
 
-def run_outlier_model(job, name, sample_id, background_id, gene_id, args):
+def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=4, memory='10G'):
     # Process names with flexible extensions
     sample_ext = os.path.splitext(args.sample)[1]
     sample_name = 'sample_matrix{}'.format(sample_ext)
