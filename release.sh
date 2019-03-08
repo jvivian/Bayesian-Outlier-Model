@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-VERSION=1.0a6
-
 # Delete build folder in case it exists
 rm -r dist
 

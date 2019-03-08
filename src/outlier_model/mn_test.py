@@ -55,6 +55,9 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     df = df.sort_values(group)
     genes = df.columns[col_skip:]
 
+    # REMOVE MATCHED NORMAL - for testing purposes only
+    df = df[df[group] != sample[group]]
+
     # Select training set
     click.echo('Selecting training set')
     ranks = pairwise_distance_ranks(sample, df, genes, group)
@@ -62,9 +65,6 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     ranks.to_csv(ranks_path, sep='\t')
     n_bg = n_bg if n_bg < len(ranks) else len(ranks)
     train_set = df[df[group].isin(ranks.head(n_bg)['Group'])]
-
-    # REMOVE MATCHED NORMAL — For testing purposes
-    train_set = train_set[train_set[group] != sample[group]]
 
     # Parse training genes
     if gene_list is None:

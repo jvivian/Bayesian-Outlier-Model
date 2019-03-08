@@ -40,7 +40,7 @@ def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=
                   '--num-training-genes', str(args.num_training_genes)]
     if gene_id:
         parameters.extend(['--gene-list', '/data/gene-list.txt'])
-    image = 'jvivian/bayesian-outlier-model:1.0a6'
+    image = 'jvivian/bayesian-outlier-model:1.0a7'
     apiDockerCall(job=job,
                   image=image,
                   working_dir=job.tempDir,
