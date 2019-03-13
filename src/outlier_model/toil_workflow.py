@@ -16,9 +16,9 @@ def workflow(job, samples, args):
 
 
 def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=2, memory='5G'):
-    # Check if output already exists
-    if os.path.exists(os.path.join(args.out_dir, name)):
-        print(f'Output already exists: {os.path.join(args.out_dir, name)}')
+    # Check if output already exists and don't run if so
+    output = os.path.join(args.out_dir, name)
+    if os.path.exists(output):
         return 0
 
     # Process names with flexible extensions
