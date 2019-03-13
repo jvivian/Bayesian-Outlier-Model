@@ -15,7 +15,12 @@ def workflow(job, samples, args):
     job.addChildJobFn(map_job, run_outlier_model, samples, sample_id, background_id, gene_id, args)
 
 
-def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=4, memory='5G'):
+def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=2, memory='5G'):
+    # Check if output already exists
+    if os.path.exists(os.path.join(args.out_dir, name)):
+        print(f'Output already exists: {os.path.join(args.out_dir, name)}')
+        return 0
+
     # Process names with flexible extensions
     sample_ext = os.path.splitext(args.sample)[1]
     sample_name = 'sample_matrix{}'.format(sample_ext)
@@ -40,7 +45,7 @@ def run_outlier_model(job, name, sample_id, background_id, gene_id, args, cores=
                   '--num-training-genes', str(args.num_training_genes)]
     if gene_id:
         parameters.extend(['--gene-list', '/data/gene-list.txt'])
-    image = 'jvivian/bayesian-outlier-model:1.0a13'
+    image = 'jvivian/bayesian-outlier-model:1.0a14'
     apiDockerCall(job=job,
                   image=image,
                   working_dir=job.tempDir,
