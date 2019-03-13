@@ -144,6 +144,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     os.environ['THEANO_FLAGS'] = f'base_compiledir={theano_dir}'
 
     # Calculate weights for model
+    click.echo('Calculating weights from ranks')
     weights = weights_from_ranks(ranks)
 
     # Run model and output runtime
@@ -155,17 +156,17 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     click.secho(f'Model runtime: {runtime} ({unit})', fg='green')
 
     # Traceplot
-    fig, axarr = plt.subplots(3, 2, figsize=(10, 5))
+    fig, axarr = plt.subplots(2, 2, figsize=(10, 5))
     pm.traceplot(trace, varnames=['a', 'eps'], ax=axarr)
     traceplot_out = os.path.join(out_dir, 'traceplot.png')
     fig.savefig(traceplot_out)
 
     # Weight plot and weight table
-    classes = train_set[group].unique()
-    weights = plot_weights(classes, trace, output=os.path.join(out_dir, 'weights.png'))
+    #classes = train_set[group].unique()
+    #weights = plot_weights(classes, trace, output=os.path.join(out_dir, 'weights.png'))
     # Convert weights to summarized information of median and std
-    weights = weights.groupby('Class').agg({'Weights': ['median', 'std']})
-    weights = weights.sort_values(('Weights', 'median'), ascending=False)
+    #weights = weights.groupby('Class').agg({'Weights': ['median', 'std']})
+    #weights = weights.sort_values(('Weights', 'median'), ascending=False)
     weights.to_csv(os.path.join(out_dir, 'weights.tsv'), sep='\t')
 
     # PPC / PPP
