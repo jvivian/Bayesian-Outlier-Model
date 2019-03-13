@@ -125,9 +125,6 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     n_bg = n_bg if n_bg < len(ranks) else len(ranks)
     train_set = df[df[group].isin(ranks.head(n_bg)['Group'])]
 
-    # Calculate weights for model
-    weights = weights_from_ranks(ranks)
-
     # Parse training genes
     if gene_list is None:
         click.secho(f'No gene list provided. Selecting {n_train} genes via SelectKBest (ANOVA F-value)', fg='yellow')
@@ -146,6 +143,9 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
     # Set env variable for base_compiledir before importing model
     os.environ['THEANO_FLAGS'] = f'base_compiledir={theano_dir}'
 
+    # Calculate weights for model
+    weights = weights_from_ranks(ranks)
+
     # Run model and output runtime
     t0 = time.time()
     model, trace = run_model(sample, train_set, training_genes, weights=weights, group=group)
@@ -156,7 +156,7 @@ def cli(sample, background, name, out_dir, group, col_skip, n_bg, gene_list, max
 
     # Traceplot
     fig, axarr = plt.subplots(3, 2, figsize=(10, 5))
-    pm.traceplot(trace, varnames=['a', 'b', 'eps'], ax=axarr)
+    pm.traceplot(trace, varnames=['a', 'eps'], ax=axarr)
     traceplot_out = os.path.join(out_dir, 'traceplot.png')
     fig.savefig(traceplot_out)
 
